@@ -1,0 +1,15 @@
+[
+    {
+        "customer":"BigGo",
+        "performances":[
+            {
+                "playID":"hamlet",
+                "audience":55
+            },
+            {
+                "playID":"as-like",
+                "audience":35
+            }
+        ]
+    }
+]
