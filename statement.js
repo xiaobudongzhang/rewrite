@@ -2,6 +2,9 @@ var fs = require('fs');
 
 var invoice = "";
 var plays = "";
+function playFor(aPerformance){
+    return plays[aPerformance.playID]
+}
 function amountFor(aPerformance, play){
     let thisAmount = 0;
     switch (play.type) {
@@ -48,9 +51,8 @@ function statement(invoice, plays) {
     }).format;
 
     for (let perf of invoice.performances) {
-        const play = plays[perf.playID]
-        let thisAmount = 0;
-        amountFor(perf, play)
+        const play = playFor(perf)
+        let thisAmount = amountFor(perf, play)
  
 
         volumeCredits += Math.max(perf.audience - 30, 0);
