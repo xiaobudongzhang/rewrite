@@ -2,7 +2,13 @@ var fs = require('fs');
 
 var invoice = "";
 var plays = "";
-
+function totalVolumeCredits(){
+    let volumeCredits = 0;
+    for (let perf of invoice.performances) {
+        volumeCredits += volumeCreditsFor(perf);
+    }
+    return volumeCredits;
+}
 function usd(aNumber){
     return new Intl.NumberFormat("en-US",{
         style:"currency",
@@ -58,20 +64,16 @@ function getFileByPath(path){
     });
 }
 
-function statement(invoice, plays) {
+function statement(invoice) {
     let totalAmount = 0;
     let result = `Statement for ${invoice.customer}\n`
-  
+
     for (let perf of invoice.performances) {
         result += ` ${playFor(perf).name} : ${usd(amountFor(perf))}  (${perf.audience} seats)\n`
         totalAmount += amountFor(perf);
     }
 
-    let volumeCredits = 0;
-    for (let perf of invoice.performances) {
-
-        volumeCredits += volumeCreditsFor(perf);
-    }
+    let volumeCredits = totalVolumeCredits();
     result += `Amount owed is ${usd(totalAmount)}\n`;
     result += `You earned ${volumeCredits} credits\n`;
     return result;
@@ -87,7 +89,8 @@ getFileByPath('plays.json')
 })
 .then(function(data){ 
     invoice = JSON.parse(data)
-   console.log(statement(invoice[0], plays));
+    invoice = invoice[0]
+   console.log(statement(invoice));
 })
 .catch(function(err){
     console.log('err:' + err);
