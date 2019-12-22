@@ -2,6 +2,20 @@ var fs = require('fs');
 
 var invoice = "";
 var plays = "";
+
+function volumeCreditsFor(perf){
+    let volumeCredits = 0;
+    volumeCredits += Math.max(perf.audience - 30, 0);
+    if ("comedy" == playFor(perf).type) {
+        volumeCredits += Math.floor(perf.audience / 5);
+    }
+    return volumeCredits;
+}
+
+function volumeCreditsFor(perrf){
+    let volumeCredits = 0;
+    volumeCredits += Math.max()
+}
 function playFor(aPerformance){
     return plays[aPerformance.playID]
 }
@@ -51,11 +65,8 @@ function statement(invoice, plays) {
     }).format;
 
     for (let perf of invoice.performances) {
-        
-        volumeCredits += Math.max(perf.audience - 30, 0);
-        if ("comedy" == playFor(perf).type) {
-            volumeCredits += Math.floor(perf.audience / 5);
-        }
+
+        volumeCredits = volumeCreditsFor(perf);
 
         result += ` ${playFor(perf).name} : ${format(amountFor(perf)/100)}  (${perf.audience} seats)\n`
         totalAmount += amountFor(perf);
