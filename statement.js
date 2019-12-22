@@ -2,7 +2,27 @@ var fs = require('fs');
 
 var invoice = "";
 var plays = "";
-
+function amountFor(perf, play){
+    let thisAmount = 0;
+    switch (play.type) {
+        case "tragedy":
+            thithisAmount = 40000;
+            if (perf.audience > 30) {
+                thisAmount += 1000 * (perf.audience -30)
+            }
+            break;
+        case "comedy":
+            thisAmount = 30000;
+            if (perf.audience > 20) {
+                thisAmount += 1000 + 500 * (perf.audience -20)
+            }
+            thisAmount += 300 * perf.audience
+            break;
+            default:
+                throw new Error(`unknown type:${play.type}`);
+    }
+    return thisAmount
+}
 function getFileByPath(path){
     return new Promise(function(resolve, reject){
         fs.readFile(path,'utf8',function (err, data) {
@@ -30,24 +50,8 @@ function statement(invoice, plays) {
     for (let perf of invoice.performances) {
         const play = plays[perf.playID]
         let thisAmount = 0;
-
-        switch (play.type) {
-            case "tragedy":
-                this.thisAmount = 40000;
-                if (perf.audience > 30) {
-                    thisAmount += 1000 * (perf.audience -30)
-                }
-                break;
-            case "comedy":
-                this.thisAmount = 30000;
-                if (perf.audience > 20) {
-                    thisAmount += 1000 + 500 * (perf.audience -20)
-                }
-                thisAmount += 300 * perf.audience
-                break;
-                default:
-                    throw new Error(`unknown type:${play.type}`);
-        }
+        amountFor(perf, play)
+ 
 
         volumeCredits += Math.max(perf.audience - 30, 0);
         if ("comedy" == play.type) {
