@@ -1,7 +1,6 @@
 var fs = require('fs');
 
-var invoice = "";
-var plays = "";
+
 
 function getFileByPath(path){
     return new Promise(function(resolve, reject){
@@ -15,8 +14,10 @@ function getFileByPath(path){
         
     });
 }
-
-function statement(invoice) {
+function statement(invoice, plays) {
+   return renderPlainText(invoice, plays);
+}
+function renderPlainText(invoice, plays) {
     let result = `Statement for ${invoice.customer}\n`
 
     for (let perf of invoice.performances) {
@@ -86,15 +87,15 @@ function statement(invoice) {
 }
 
 
-
+var playsData = ''
 getFileByPath('plays.json')
 .then(function(data){
-    plays = JSON.parse(data)
+    playsData = JSON.parse(data)
    return getFileByPath('invoices.json');
 })
 .then(function(data){ 
     invoice = JSON.parse(data)
-   console.log(statement(invoice[0]));
+   console.log(statement(invoice[0], playsData));
 })
 .catch(function(err){
     console.log('err:' + err);
